@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fix & Flip Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Fix & Flip Calculator</h2>
+        <label>Estimated ARV ($)</label>
+        <input type="number" id="arv" value="0">
+        
+        <label>Purchase Price ($)</label>
+        <input type="number" id="purchase" value="0">
+        
+        <label>Rehab Costs ($)</label>
+        <input type="number" id="rehab" value="0">
+        
+        <label>Carrying Costs ($)</label>
+        <input type="number" id="carrying" value="0">
+        
+        <label>Closing Costs ($)</label>
+        <input type="number" id="closing" value="0">
+        
+        <label>Miscellaneous Costs ($)</label>
+        <input type="number" id="misc" value="0">
+        
+        <button onclick="calculateProfit()">Calculate</button>
+        <canvas id="profitChart"></canvas>
+    </div>
+
+    <script>
+        function calculateProfit() {
+            let arv = parseFloat(document.getElementById('arv').value) || 0;
+            let purchase = parseFloat(document.getElementById('purchase').value) || 0;
+            let rehab = parseFloat(document.getElementById('rehab').value) || 0;
+            let carrying = parseFloat(document.getElementById('carrying').value) || 0;
+            let closing = parseFloat(document.getElementById('closing').value) || 0;
+            let misc = parseFloat(document.getElementById('misc').value) || 0;
+            
+            let totalCost = purchase + rehab + carrying + closing + misc;
+            let profit = arv - totalCost;
+            
+            updateChart(totalCost, profit);
+        }
+        
+        function updateChart(cost, profit) {
+            let ctx = document.getElementById('profitChart').getContext('2d');
+            if (window.myChart) window.myChart.destroy();
+            window.myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Total Costs', 'Profit'],
+                    datasets: [{
+                        data: [cost, profit],
+                        backgroundColor: ['#888', '#4CAF50']
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+        }
+    </script>
+</body>
+</html>
